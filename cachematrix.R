@@ -1,4 +1,49 @@
 
+
+####################################################
+####################################################
+# This R program calculates the inverse of a matrix
+#
+# Since this calculation can be expensive for a large
+# matrix, this program caches the results. 
+# 
+# In case the inverse for a given matrix already has 
+# been calculated, the answer will be given from the 
+# cache instead if executing this expensive calculation again
+#
+# Example:
+#
+# May c be a 2 by 2 matrix:
+#
+# > c = rbind(c(1, -1/4), c(-1/4, 1))
+# > c
+#       [,1]  [,2]
+# [1,]  1.00 -0.25
+# [2,] -0.25  1.00
+# 
+# > c2 = makeCacheMatrix(c)
+#
+# Then cacheSolve calculates the inverse matrix for 
+# above given matrix c
+#
+# > cacheSolve(c2)
+#           [,1]      [,2]
+# [1,] 1.0666667 0.2666667
+# [2,] 0.2666667 1.0666667
+# 
+# Since the result already has been cached, the response
+# will be taken from the cache (see message "getting 
+# cached data") instead of recalculating it:
+#
+# > cacheSolve(c2)
+# getting cached data
+#           [,1]      [,2]
+# [1,] 1.0666667 0.2666667
+# [2,] 0.2666667 1.0666667
+####################################################
+
+
+
 ####################################################
 # makeCacheMatrix: This function creates a special 
 # "matrix" object that can cache its inverse.
@@ -54,7 +99,7 @@ cacheSolve <- function(x, ...) {
    # return the cached data if possible 
    if(!is.null(m)) {
       message("getting cached data")
-      return(x)
+      return(m)
    }
 
    data <- x$get()
@@ -72,6 +117,7 @@ cacheSolve <- function(x, ...) {
    # 
    # 
    # example:
+   #
    # > c = rbind(c(1, -1/4), c(-1/4, 1))
    # > c
    #       [,1]  [,2]
@@ -88,6 +134,11 @@ cacheSolve <- function(x, ...) {
    # matrix multiplication is denoted with %*%
    # without the % sign an element by element multiplication would
    # be excecuted
+   # 
+   # By definition, the matrix multiplied by its inverse matrix 
+   # gives the identity matrix, i.e. a matrix with ones on the main 
+   # diagonal (upper left to bottom right) and zeros at all other 
+   # positions
    #
    # > identitymatrix <- c %*% inverse
    # > identitymatrix  
